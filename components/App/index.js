@@ -8,7 +8,17 @@ import {
     Dimensions
 } from 'react-native';
 
+import Drop from '../Drop';
+
+const CIRCLE_RADIUS = 36;
+const Window = Dimensions.get('window');
+const { width, height} = Window;
+
 export default class App extends Component {
+    static defaultProps = {
+        dropsCount: 10
+    };
+
     constructor(props) {
         super(props);
 
@@ -68,7 +78,7 @@ export default class App extends Component {
         }
     }
 
-    render() {
+    render({ dropsCount } = this.props) {
         return (
             <View style={styles.mainContainer}>
                 <View
@@ -76,15 +86,20 @@ export default class App extends Component {
                     style={styles.dropZone}>
                     <Text style={styles.text}>Drop me here!</Text>
                 </View>
+                {[...Array(dropsCount)].map((_, index) => <Drop
+                    x={Math.random() * width}               // x-coordinate
+                    y={Math.random() * height}              // y-coordinate
+                    radius={Math.random() * 4 + 1}          // radius
+                    density={Math.random() * dropsCount}   // density
+                    key={index}
+                />)}
 
-                {this.renderDraggable()}
-            </View>
+            {this.renderDraggable()}
+        </View>
         );
     }
 }
 
-let CIRCLE_RADIUS = 36;
-let Window = Dimensions.get('window');
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1
